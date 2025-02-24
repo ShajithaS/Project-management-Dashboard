@@ -1,0 +1,51 @@
+.dashboard-container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+}
+
+.dashboard-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 30%;
+}
+
+.stat-card h2 {
+  color: blue;
+  font-size: 24px;
+}
+
+.stat-card p {
+  color: #666;
+  font-size: 14px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: darkred;
+}
