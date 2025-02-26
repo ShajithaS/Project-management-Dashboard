@@ -1,11 +1,11 @@
 import React from 'react'
 import "./Profile.css"
-
+import img from "../../assets/profile.png"
 const Profile = () => {
   return (
     <div className="profile-container">
       <img 
-        src="" 
+        src={img} 
         alt="Profile" 
         className="profile-img" 
       />

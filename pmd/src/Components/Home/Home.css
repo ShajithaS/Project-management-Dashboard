@@ -1,10 +1,13 @@
 .home-container {
   text-align: center;
-  margin-top: 100px;
+  margin-top: 25px;
+  background: url("/assets/bg.gif") no-repeat center center/cover;
+  animation: fadeIn 1.5s ease-in-out;  /* Fade-in effect */
 }
 
+
 .home-buttons {
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .btn {
@@ -13,11 +16,71 @@
   text-decoration: none;
   font-size: 18px;
   color: white;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: #007bff;
   border-radius: 5px;
   transition: 0.3s;
 }
 
 .btn:hover {
   transform: scale(1.05);
+}
+.features-list {
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+.features-list:hover {
+    transform: scale(1.02);
+}
+
+.features-list li {
+    font-size: 1rem;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.features-list li::before {
+    content: "✔️";
+}
+h1{
+font-size: 2.5rem;
+    margin-bottom: 10px;
+    
+}
+
+.team-image {
+    max-width: 100%;
+    height: auto;
+    
+    transition: transform 0.3s ease-in-out;
+}
+.team-image:hover {
+    transform: scale(1.02);
+}
+.team-image-container {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+}
+.home-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    flex-wrap: wrap; 
+    max-width: 900px;
+    margin: 30px auto;
+    margin-top: 50px;
+    gap: 30px;
+}
+.features-list {
+    flex: 1;
+    max-width: 450px;
 }

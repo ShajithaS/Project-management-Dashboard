@@ -4,19 +4,20 @@
     align-items: center;
     justify-content: space-between;
     padding: 15px 10px;
-    background: rgb(139, 135, 135);
+    background: rgb(191, 187, 187);
     color: white;
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 1000;
+    border-radius: 5px;
 }
 
 /* Logo */
 .logo {
     font-size: 24px;
     font-weight: bold;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background:#007bff;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -43,7 +44,7 @@
 }
 
 .nav-links a:hover {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background:#007bff;
     border-radius: 5px;
 }
 .ul{
@@ -52,7 +53,7 @@
 
 /* Logout Button */
 .logout-btn {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: #007bff;
     border: none;
     padding: 10px 20px;
     font-size: 16px;

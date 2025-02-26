@@ -6,6 +6,7 @@ import Signup from "./Components/Signup/Signup"
 import Dashboard from "./Components/Dashboard/Dashboard";
 import Projects from "./Components/Projects/Projects";
 import Profile from "./Components/Profile/Profile";
+import { useState } from "react";
 const App = () => {
   return (
     <div>

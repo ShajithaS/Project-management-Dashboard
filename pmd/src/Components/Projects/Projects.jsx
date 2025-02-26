@@ -12,9 +12,24 @@ const Projects = () => {
       status: "In Progress",
       deadline: "2025-03-10",
       tasks: [
-        { id: 101, title: "Setup Database", status: "Completed",assignedTo: "Alice"},
-        { id: 102, title: "Build UI Components", status: "In Progress",assignedTo: "Alice" },
-        { id: 103, title: "Integrate Backend", status: "Pending",assignedTo: "Alice" },
+        {
+          id: 101,
+          title: "Setup Database",
+          status: "Completed",
+          assignedTo: "John",
+        },
+        {
+          id: 102,
+          title: "Build UI Components",
+          status: "In Progress",
+          assignedTo: "Ben",
+        },
+        {
+          id: 103,
+          title: "Integrate Backend",
+          status: "Pending",
+          assignedTo: "Lia",
+        },
       ],
     },
     {
@@ -25,8 +40,18 @@ const Projects = () => {
       status: "Pending",
       deadline: "2025-04-01",
       tasks: [
-        { id: 201, title: "Collect Dataset", status: "Completed" },
-        { id: 202, title: "Train Model", status: "Pending" },
+        {
+          id: 201,
+          title: "Collect Dataset",
+          status: "Completed",
+          assignedTo: "Amanda",
+        },
+        {
+          id: 202,
+          title: "Train Model",
+          status: "Pending",
+          assignedTo: "Claura",
+        },
       ],
     },
   ]);
@@ -87,7 +112,12 @@ const Projects = () => {
               ...p,
               tasks: [
                 ...p.tasks,
-                { id: Date.now(), title: newTask, status: "Pending",assignedTo: assignedMember,},
+                {
+                  id: Date.now(),
+                  title: newTask,
+                  status: "Pending",
+                  assignedTo: assignedMember,
+                },
               ],
             }
           : p
@@ -154,10 +184,62 @@ const Projects = () => {
       deadline: "",
     });
   };
+  const totalCompleted = projects.filter(
+    (p) => p.status === "Completed"
+  ).length;
+  const totalInProgress = projects.filter(
+    (p) => p.status === "In Progress"
+  ).length;
+  const totalPending = projects.filter((p) => p.status === "Pending").length;
+  const today = new Date();
+  //Task completion percentage
+  const getTaskCompletion = (tasks) => {
+    if (tasks.length === 0) return 0; // If no tasks, completion is 0%
+    const completedTasks = tasks.filter(
+      (task) => task.status === "Completed"
+    ).length;
+    return Math.round((completedTasks / tasks.length) * 100); // Calculate percentage
+  };
 
+  // Check upcoming deadlines (projects due within the next 7 days)
+  const upcomingDeadlines = projects.filter((p) => {
+    const deadlineDate = new Date(p.deadline);
+    const timeDiff = deadlineDate - today;
+    const daysRemaining = timeDiff / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+    return daysRemaining > 0 && daysRemaining <= 7;
+  }).length;
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredProjects = projects.filter((project) =>
+  project.title.toLowerCase().includes(searchQuery.toLowerCase())
+);
+{filteredProjects.map((project) => (
+  <div key={project.id} className="project-card">
+    <h3>{project.title}</h3>
+    <p>{project.description}</p>
+  </div>
+))}
   return (
     <div className="projects-container">
       <h2 className="projects-title">My Projects</h2>
+      <div className="project-summary">
+        <div className="summary-box completed">
+          ✅ Completed: {totalCompleted}
+        </div>
+        <div className="summary-box in-progress">
+          🚀 In Progress: {totalInProgress}
+        </div>
+        <div className="summary-box pending">⏳ Pending: {totalPending}</div>
+        <div className="summary-box pending">
+          ⏰ Upcoming Deadlines (Next 7 Days): {upcomingDeadlines}
+        </div>
+        <input
+  type="text"
+  placeholder="Search projects..."
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+  className="search-bar"
+/>
+      </div>
 
       <div className="projects-grid">
         <div className="add-project-section">
@@ -197,7 +279,7 @@ const Projects = () => {
             <button type="submit">Add Project</button>
           </form>
         </div>
-        {projects.map((project) =>
+        {filteredProjects.map((project) =>
           editingProject === project.id ? (
             <div key={project.id} className="project-card">
               <h3>Edit Project</h3>
@@ -274,6 +356,29 @@ const Projects = () => {
               {selectedProject === project.id && (
                 <div className="tasks-section">
                   <h4>Tasks</h4>
+                  <div className="progress-bar-container">
+                    <div
+                      className="progress-bar"
+                      style={{ width: `${getTaskCompletion(project.tasks)}%` }}
+                    ></div>
+                  </div>
+                  <p className="progress-text">
+                    {getTaskCompletion(project.tasks)}% Completed
+                  </p>
+                  <div className="task-row">
+                    <div>
+                      <h3>Task</h3>
+                    </div>
+                    <div>
+                      <h3>Assignee</h3>
+                    </div>
+                    <div>
+                      <h3>Status</h3>
+                    </div>
+                    <div>
+                      <h3>Delete</h3>
+                    </div>
+                  </div>
                   {project.tasks.map((task) => (
                     <div key={task.id} className="task-item">
                       <p
@@ -281,7 +386,7 @@ const Projects = () => {
                       >
                         {task.title}
                       </p>
-                      <p><strong>Assigned to:</strong> {task.assignedTo}</p>
+                      <p>{task.assignedTo}</p>
                       <select
                         value={task.status}
                         onChange={(e) =>
@@ -296,7 +401,7 @@ const Projects = () => {
                         className="delete-btn"
                         onClick={() => deleteTask(project.id, task.id)}
                       >
-                        Delete
+                        🗑
                       </button>
                     </div>
                   ))}
