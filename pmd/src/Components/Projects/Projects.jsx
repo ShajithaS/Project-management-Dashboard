@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import "./Projects.css";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
 
 const Projects = () => {
   const [projects, setProjects] = useState([
@@ -208,6 +209,16 @@ const Projects = () => {
     const daysRemaining = timeDiff / (1000 * 60 * 60 * 24); // Convert milliseconds to days
     return daysRemaining > 0 && daysRemaining <= 7;
   }).length;
+
+  //piechart for project status
+  const projectStatusData = [
+    { name: "Completed", count: totalCompleted },
+    { name: "In Progress", count: totalInProgress },
+    { name: "Pending", count: totalPending },
+  ];
+
+
+  //to search project 
   const [searchQuery, setSearchQuery] = useState("");
   const filteredProjects = projects.filter((project) =>
   project.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -239,6 +250,16 @@ const Projects = () => {
   onChange={(e) => setSearchQuery(e.target.value)}
   className="search-bar"
 />
+      </div>
+      <div className="chart-container">
+        <h2>Project Status Overview</h2>
+        <BarChart width={500} height={300} data={projectStatusData}>
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="count" fill="#007bff" />
+        </BarChart>
       </div>
 
       <div className="projects-grid">

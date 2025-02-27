@@ -140,7 +140,7 @@ button {
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.5s;
 }
 
 button:hover {
@@ -231,7 +231,7 @@ input, select {
 .task-row{
     
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 0.5fr; /* Adjust column width */
+  grid-template-columns: 2fr 1fr 1fr 0.5fr;
   align-items: center;
   background: #f8f9fa;
   padding: 10px;
@@ -285,4 +285,11 @@ input, select {
   font-size: 0.9em;
   text-align: center;
   font-weight: bold;
+}
+.chart-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin:40px;
+    gap: 20px;
 }
