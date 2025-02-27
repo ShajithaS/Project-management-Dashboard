@@ -2,59 +2,76 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import './Signup.css'
-
+import axios from "axios"
 const Signup = () => {
-    const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required!");
-      return;
+    const navigate=useNavigate()
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(0);
+  const [password, setPassword] = useState("");
+  const handleSignup = async(event) => {
+    event.preventDefault()
+    const req=await axios.post("http://localhost:3001/signup", {
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      phoneNumber: phoneNumber,
+      password: password
+    });
+    const message=req.data.message;
+    const isSignup=req.data.isSignup;
+    if(isSignup){
+        alert(message)
+        navigate('/login')
     }
-
-    console.log("Signup Successful:", formData);
-
-    // Redirect to login page
-    navigate("/login");
+    else{
+        alert(message)
+    }
   };
   return (
     <div className="signup-container">
-        <h2>Sign Up</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSignup}>
         <input
           type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
+          id="firstname"
+          placeholder="First Name"
+          required
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+        />
+        <input
+          type="text"
+          id="lastname"
+          placeholder="Last Name"
+          required
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
         />
         <input
           type="email"
-          name="email"
+          id="email"
           placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="number"
+          id="phoneNumber"
+          placeholder="Phone no"
+          required
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <input
           type="password"
-          name="password"
+          id="password"
           placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Sign Up</button>
       </form>

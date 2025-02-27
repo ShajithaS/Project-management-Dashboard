@@ -2,52 +2,36 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import './Login.css'
 import { useState } from 'react';
+import axios from "axios"
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!formData.email || !formData.password) {
-      setError("All fields are required!");
-      return;
+    const navigate = useNavigate()
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const handleLogin = async(event) => {
+    event.preventDefault()
+    const req=await axios.post("http://localhost:3001/login", {
+      email: email,
+      password: password
+    });
+    const message=req.data.message;
+    const isLogin=req.data.isLogin;
+    if(isLogin){
+        alert(message)
+        navigate('/dashboard')
     }
-
-    console.log("Login Successful:", formData);
-
-    // Redirect to dashboard after login
-    navigate("/dashboard");
+    else{
+        alert(message)
+    }
   };
   return (
     <div className="login-container">
        <h2>Login</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+      <form onSubmit={handleLogin}>
+        <input type="email" name="email" id="email"placeholder="Email" required value={email}
+          onChange={(e) => setEmail(e.target.value)}/>
+        <input type="password" name="password"id="password" placeholder="Password" required value={password}
+          onChange={(e) => setPassword(e.target.value)}/>
         <button type="submit">Login</button>
       </form>
       <p>Don't have an account? <a href="/signup">Sign Up</a></p>  
