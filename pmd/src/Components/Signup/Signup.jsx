@@ -12,7 +12,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const handleSignup = async(event) => {
     event.preventDefault()
-    const req=await axios.post("http://localhost:3001/signup", {
+    const req=await axios.post("https://project-management-dashboard-bvuh.onrender.com/signup", {
       firstname: firstname,
       lastname: lastname,
       email: email,

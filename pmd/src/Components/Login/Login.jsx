@@ -10,7 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const handleLogin = async(event) => {
     event.preventDefault()
-    const req=await axios.post("http://localhost:3001/login", {
+    const req=await axios.post("https://project-management-dashboard-bvuh.onrender.com/login", {
       email: email,
       password: password
     });
