@@ -1,7 +1,13 @@
 import React from 'react'
 import "./Profile.css"
 import img from "../../assets/profile.png"
+import { useNavigate } from 'react-router-dom'
 const Profile = () => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    console.log("User logged out");
+    navigate("/login");
+  };
   return (
     <div className="profile-container">
       <img 
@@ -17,7 +23,7 @@ const Profile = () => {
       </p>
       <div className="profile-actions">
         <button className="profile-btn">Edit Profile</button>
-        <button className="profile-btn">Logout</button>
+        <button className="profile-btn" onClick={handleLogout}>Logout</button>
       </div>
     </div>
   )

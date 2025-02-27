@@ -6,14 +6,12 @@ import Navbar from "../Navbar/Navbar";
 const Dashboard = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Clear user session (if stored in local storage or context)
     console.log("User logged out");
     navigate("/login");
   };
 
   return (
     <div className="dashboard-container">
-    <Navbar />
         <h1>Welcome to Your Dashboard</h1>
       <p>Manage your projects efficiently!</p>
 
@@ -31,8 +29,6 @@ const Dashboard = () => {
           <p>Upcoming Deadlines</p>
         </div>
       </div>
-
-      <button className="logout-btn" onClick={handleLogout}>Logout</button>
     </div>
   )
 }

@@ -18,7 +18,7 @@ const Login = () => {
     const isLogin=req.data.isLogin;
     if(isLogin){
         alert(message)
-        navigate('/dashboard')
+        navigate('/projects')
     }
     else{
         alert(message)
