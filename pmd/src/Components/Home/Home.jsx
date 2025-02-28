@@ -20,8 +20,6 @@ const Home = () => {
           <li>👥 Team Collaboration – Assign tasks to team members and track progress.</li>
           <li>📅 Project Timeline – View deadlines and project milestones at a glance.</li>
           <li>📊 Dashboard Overview – Get insights into ongoing, completed, and upcoming projects.</li>
-          <li>⚡ Real-time Updates – Status updates for tasks and projects.</li>
-          <li>🔔 Notifications & Reminders – Stay informed about deadlines.</li>
         </ul>
         </div>
       

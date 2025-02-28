@@ -17,12 +17,25 @@ import Navbar from "../Navbar/Navbar";
 const Projects = () => {
   const [projects, setProjects] = useState([
     {
-      id: 1,
+    id: 1,
+    title: "Healthcare App",
+    description:
+      "A mobile app for booking doctor appointments and managing health records.",
+    status: "Completed",
+    deadline: "2025-02-20",
+    tasks: [
+      { id: 401, title: "Build Mobile UI", status: "Completed", assignedTo: "Mia" },
+      { id: 402, title: "Setup Firebase Backend", status: "Completed", assignedTo: "Liam" },
+      { id: 403, title: "Deploy on App Store", status: "Completed", assignedTo: "Noah" },
+    ],
+  },
+    {
+      id: 2,
       title: "Project Management Dashboard",
       description:
         "A MERN stack application to manage projects, tasks, and teams.",
       status: "In Progress",
-      deadline: "2025-03-04",
+      deadline: "2025-03-02",
       tasks: [
         {
           id: 101,
@@ -45,7 +58,7 @@ const Projects = () => {
       ],
     },
     {
-      id: 2,
+      id: 3,
       title: "Dyslexia Assist App",
       description:
         "An AI-powered application to assist dyslexic users with reading.",
@@ -55,7 +68,7 @@ const Projects = () => {
         {
           id: 201,
           title: "Collect Dataset",
-          status: "Completed",
+          status: "Pending",
           assignedTo: "Amanda",
         },
         {
@@ -255,7 +268,7 @@ const Projects = () => {
 
   // Colors for Pie Chart
   const COLORS = ["#28a745", "#dc3545"];
-
+  
   return (
     <div className="projects-container">
       <Navbar />
