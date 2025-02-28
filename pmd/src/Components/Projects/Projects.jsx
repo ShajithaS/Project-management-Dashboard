@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./Projects.css";
+import axios from "axios";
 import {
   BarChart,
   Bar,
@@ -198,16 +199,27 @@ const Projects = () => {
   const handleNewProjectChange = (e) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
-  const addNewProject = (e) => {
+  const addNewProject = async (e) => {
     e.preventDefault();
     if (!newProject.title.trim() || !newProject.description.trim()) return;
-    setProjects([...projects, { id: Date.now(), ...newProject, tasks: [] }]);
-    setNewProject({
-      title: "",
-      description: "",
-      status: "Pending",
-      deadline: "",
-    });
+    const newProjectData = {
+    id: Date.now(),
+    ...newProject,
+    tasks: []
+  };
+
+  setProjects([...projects, newProjectData]);
+
+  // Save to database
+  await handleSave(newProjectData);
+
+  // Reset form
+  setNewProject({
+    title: "",
+    description: "",
+    status: "Pending",
+    deadline: "",
+  });
   };
   const totalCompleted = projects.filter(
     (p) => p.status === "Completed"
@@ -268,6 +280,32 @@ const Projects = () => {
 
   // Colors for Pie Chart
   const COLORS = ["#28a745", "#dc3545"];
+  const handleSave = async(project) => {
+    const req=await axios.post("http://localhost:3001/project",project);
+    const message=req.data.message;
+    const isSave=req.data.isSave;
+    if(isSave){
+        alert(message)
+    }
+    else{
+        alert(message)
+    }
+  };
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/projects");
+        setProjects(response.data); // Update state with fetched projects
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+  /*const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString("en-GB"); // "04/03/2030"
+};*/
   
   return (
     <div className="projects-container">
@@ -374,7 +412,7 @@ const Projects = () => {
                 onChange={handleNewProjectChange}
                 required
               />
-              <button type="submit">Add Project</button>
+              <button type="submit" >Add Project</button>
             </form>
           </div>
           {filteredProjects.map((project) =>
