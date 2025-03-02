@@ -16,10 +16,10 @@ const Home = () => {
           <img src={teamImage} alt="Team Collaboration" className="team-image" />
         </div>
         <ul className="features-list">
-          <li>📌 Task Management – Create, assign, and track tasks with deadlines.</li>
-          <li>👥 Team Collaboration – Assign tasks to team members and track progress.</li>
-          <li>📅 Project Timeline – View deadlines and project milestones at a glance.</li>
-          <li>📊 Dashboard Overview – Get insights into ongoing, completed, and upcoming projects.</li>
+          <li>📌 Task Management - Create, assign, and track tasks with deadlines.</li>
+          <li>👥 Team Collaboration - Assign tasks to team members and track progress.</li>
+          <li>📅 Project Timeline - View deadlines and project milestones at a glance.</li>
+          <li>📊 Dashboard Overview - Get insights into ongoing, completed, and upcoming projects.</li>
         </ul>
         </div>
       

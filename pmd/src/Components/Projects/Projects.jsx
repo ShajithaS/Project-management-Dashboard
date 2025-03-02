@@ -17,7 +17,7 @@ import Navbar from "../Navbar/Navbar";
 
 const Projects = () => {
   const [projects, setProjects] = useState([
-    {
+    /*{
     id: 1,
     title: "Healthcare App",
     description:
@@ -79,7 +79,7 @@ const Projects = () => {
           assignedTo: "Claura",
         },
       ],
-    },
+    },*/
   ]);
 
   const [editingProject, setEditingProject] = useState(null);
@@ -107,7 +107,9 @@ const Projects = () => {
   // Start editing a project
   const handleEditProject = (project) => {
     setEditingProject(project.id);
-    setProjectData(project);
+    setProjectData({
+    ...project,
+    deadline: project.deadline ? project.deadline.split("T")[0] : ""});
   };
 
   // Handle input changes for project updates
@@ -116,7 +118,7 @@ const Projects = () => {
   };
 
   // Update project details
-  const updateProject = (e) => {
+  const updateProject = async (e) => {
     e.preventDefault();
     setProjects(
       projects.map((p) =>
@@ -125,11 +127,13 @@ const Projects = () => {
     );
     setEditingProject(null);
   };
+
+
   const [newTask, setNewTask] = useState("");
   const [assignedMember, setAssignedMember] = useState("");
-
+  
   // Add a new task to a project
-  const addTask = (projectId) => {
+  const addTask = async (projectId) => {
     if (!newTask.trim() || !assignedMember.trim()) return;
     setProjects(
       projects.map((p) =>
@@ -157,7 +161,7 @@ const Projects = () => {
   const updateTaskStatus = (projectId, taskId, newStatus) => {
     setProjects(
       projects.map((p) =>
-        p.id === projectId
+        p._id === projectId
           ? {
               ...p,
               tasks: p.tasks.map((task) =>
@@ -170,7 +174,7 @@ const Projects = () => {
   };
 
   // Delete a task
-  const deleteTask = (projectId, taskId) => {
+  const deleteTask = async (projectId, taskId) => {
     setProjects(
       projects.map((p) =>
         p.id === projectId
@@ -280,6 +284,8 @@ const Projects = () => {
 
   // Colors for Pie Chart
   const COLORS = ["#28a745", "#dc3545"];
+
+  
   const handleSave = async(project) => {
     const req=await axios.post("http://localhost:3001/project",project);
     const message=req.data.message;
@@ -295,7 +301,12 @@ const Projects = () => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get("http://localhost:3001/projects");
-        setProjects(response.data); // Update state with fetched projects
+        const projectsWithId = response.data.map((project) => ({
+        ...project,
+        id: project._id, // Use MongoDB _id as the ID
+      }));
+
+      setProjects(projectsWithId);
       } catch (error) {
         console.error("Error fetching projects:", error);
       }
@@ -303,9 +314,7 @@ const Projects = () => {
 
     fetchProjects();
   }, []);
-  /*const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString("en-GB"); // "04/03/2030"
-};*/
+  
   
   return (
     <div className="projects-container">
