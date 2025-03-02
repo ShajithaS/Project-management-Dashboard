@@ -81,6 +81,8 @@ app.post("/login", async (req, res) => {
       .json({ message: "Login Error Check your code", isLogin: false });
   }
   });
+
+  //save project in db
   app.post("/project", async (req, res) => {
     try {
     console.log(req.body);
@@ -97,7 +99,7 @@ app.post("/login", async (req, res) => {
     res.status(201).json({ message: "Project saved successfully", isSave: true });
     } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Project not saved", isSave: false });
+    res.status(400).json({ message: "Error in saving project", isSave: false });
     }
     
   });
@@ -109,3 +111,94 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ message: "Error fetching projects", error });
   }
 });
+/*
+//updating project 
+app.put("/projects/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedProject = await Project.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updatedProject) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    res.json({ success: true, message: "Project updated successfully", project: updatedProject });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error updating project" });
+  }
+});*/
+/*
+//add task
+app.put("/projects/:id/add-task", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, assignedTo, status } = req.body;
+
+    // Find the project by ID and update its tasks array
+    const updatedProject = await Project.findByIdAndUpdate(
+      id,
+      { $push: { tasks: { name, assignedTo, status } } }, // Add the new task
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    res.json({ success: true, message: "Task added successfully", project: updatedProject });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error adding task" });
+  }
+});
+
+// Add a task to a specific project
+app.post("/projects/:projectId/tasks", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { title, assignedTo, status } = req.body;
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    // Create new task object
+    const newTask = { title, assignedTo, status };
+
+    // Add task to project
+    project.tasks.push(newTask);
+
+    // Save updated project
+    await project.save();
+
+    res.json({ success: true, task: newTask });
+  } catch (error) {
+    console.error("Error adding task:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+//delete task
+app.delete("/projects/:projectId/tasks/:taskId", async (req, res) => {
+  try {
+    const { projectId, taskId } = req.params;
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ success: false, message: "Project not found" });
+    }
+
+    console.log("Before Deletion:", project.tasks);
+    // Remove task by filtering out the given taskId
+    project.tasks = project.tasks.filter(task => task._id.toString() !== taskId.toString());
+
+    
+    await project.save();
+    console.log("After Deletion:", project.tasks);
+    res.json({ success: true, message: "Task deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+*/
