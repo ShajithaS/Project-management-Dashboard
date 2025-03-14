@@ -105,9 +105,12 @@ const Projects = () => {
   };
 
   // Start editing a project
+  //changes
   const handleEditProject = (project) => {
     setEditingProject(project.id);
-    setProjectData({
+    setProjectData(
+      
+      {
     ...project,
     deadline: project.deadline ? project.deadline.split("T")[0] : ""});
   };
@@ -118,7 +121,8 @@ const Projects = () => {
   };
 
   // Update project details
-  const updateProject = async (e) => {
+  //changes
+  const updateProject = (e) => {
     e.preventDefault();
     setProjects(
       projects.map((p) =>
@@ -133,7 +137,8 @@ const Projects = () => {
   const [assignedMember, setAssignedMember] = useState("");
   
   // Add a new task to a project
-  const addTask = async (projectId) => {
+//changes
+  const addTask = (projectId) => {
     if (!newTask.trim() || !assignedMember.trim()) return;
     setProjects(
       projects.map((p) =>
@@ -161,7 +166,7 @@ const Projects = () => {
   const updateTaskStatus = (projectId, taskId, newStatus) => {
     setProjects(
       projects.map((p) =>
-        p._id === projectId
+        p.id === projectId
           ? {
               ...p,
               tasks: p.tasks.map((task) =>
@@ -203,6 +208,7 @@ const Projects = () => {
   const handleNewProjectChange = (e) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
+  //changes
   const addNewProject = async (e) => {
     e.preventDefault();
     if (!newProject.title.trim() || !newProject.description.trim()) return;
@@ -225,6 +231,17 @@ const Projects = () => {
     deadline: "",
   });
   };
+  /*const addNewProject = (e) => {
+     e.preventDefault();
+     if (!newProject.title.trim() || !newProject.description.trim()) return;
+     setProjects([...projects, { id: Date.now(), ...newProject, tasks: [] }]);
+     setNewProject({
+       title: "",
+       description: "",
+       status: "Pending",
+       deadline: "",
+     });
+   };*/
   const totalCompleted = projects.filter(
     (p) => p.status === "Completed"
   ).length;
