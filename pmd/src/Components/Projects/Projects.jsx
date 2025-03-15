@@ -96,8 +96,17 @@ const Projects = () => {
     status: "Pending",
     deadline: "",
   });
-  const deleteProject = (projectId) => {
-    setProjects(projects.filter((project) => project.id !== projectId));
+  // Delete Project
+  const deleteProject = async (projectId) => {
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
+    try {
+      await axios.delete(`http://localhost:3001/project/${projectId}`);
+      setProjects(projects.filter((p) => p._id !== projectId));
+      alert("Project deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      alert("Failed to delete the project.");
+    }
   };
   // Toggle project details view
   const toggleProjectDetails = (projectId) => {
@@ -107,7 +116,7 @@ const Projects = () => {
   // Start editing a project
   //changes
   const handleEditProject = (project) => {
-    setEditingProject(project.id);
+    setEditingProject(project._id);
     setProjectData(
       
       {
@@ -122,7 +131,7 @@ const Projects = () => {
 
   // Update project details
   //changes
-  const updateProject = (e) => {
+  /*const updateProject = (e) => {
     e.preventDefault();
     setProjects(
       projects.map((p) =>
@@ -130,6 +139,17 @@ const Projects = () => {
       )
     );
     setEditingProject(null);
+  };*/
+  const updateProject = async (e) => {
+    e.preventDefault();
+    try {
+      console.log("Editing project id:",editingProject)
+      const response = await axios.put(`http://localhost:3001/project/${editingProject}`, projectData);
+      setProjects(projects.map((p) => (p._id === editingProject ? response.data.updatedProject : p)));
+      setEditingProject(null);
+    } catch (error) {
+      console.error("Error updating project:", error);
+    }
   };
 
 
@@ -260,7 +280,7 @@ const Projects = () => {
 
 
   // Delete a task
-  const deleteTask = async (projectId, taskId) => {
+ /* const deleteTask = async (projectId, taskId) => {
     setProjects(
       projects.map((p) =>
         p._id === projectId
@@ -271,6 +291,17 @@ const Projects = () => {
           : p
       )
     );
+  };*/
+  const deleteTask = async (projectId, taskId) => {
+    console.log("Project ID:", projectId);
+    console.log("Task ID:", taskId);
+    try {
+      const response = await axios.delete(`http://localhost:3001/project/${projectId}/tasks/${taskId}`);
+      setProjects(projects.map((p) => (p._id === projectId ? response.data.updatedProject : p)));
+      alert("Task deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
   // Get status styling
@@ -590,7 +621,7 @@ const Projects = () => {
                   </button>
                   <button
                     className="delete-project-btn"
-                    onClick={() => deleteProject(project.id)}
+                    onClick={() => deleteProject(project._id)}
                   >
                     Delete Project
                   </button>

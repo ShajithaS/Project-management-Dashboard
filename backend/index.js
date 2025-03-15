@@ -247,3 +247,66 @@ app.put("/project/:id/task/:taskId", async (req, res) => {
   }
 });
 
+//deleting task
+app.delete("/project/:projectId/tasks/:taskId", async (req, res) => {
+  const { projectId, taskId } = req.params;
+
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      projectId,
+      { $pull: { tasks: { _id: taskId } } },
+      { new: true }
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project or task not found" });
+    }
+
+    res.status(200).json({ message: "Task deleted successfully", updatedProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting task", error });
+  }
+});
+
+//Edit Project Details
+app.put("/project/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, description, status, deadline } = req.body;
+
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      id,
+      { title, description, status, deadline },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({ message: "Project updated successfully", updatedProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating project", error });
+  }
+});
+
+//deleting project
+app.delete("/project/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedProject = await Project.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({ message: "Project deleted successfully", deletedProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting project", error });
+  }
+});
+
