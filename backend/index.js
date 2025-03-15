@@ -202,3 +202,48 @@ app.delete("/projects/:projectId/tasks/:taskId", async (req, res) => {
   }
 });
 */
+//adding tasks
+app.put("/project/:id/tasks", async (req, res) => {
+  const { id } = req.params;
+  const { title, status, assignedTo } = req.body;
+
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      id,
+      { $push: { tasks: { title, status, assignedTo } } },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({ message: "Task added successfully", updatedProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error adding task", error });
+  }
+});
+//updating task
+app.put("/project/:id/task/:taskId", async (req, res) => {
+  const { id, taskId } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedProject = await Project.findOneAndUpdate(
+      { _id: id, "tasks._id": taskId }, // Match the specific task
+      { $set: { "tasks.$.status": status } }, // Update only that task's status
+      { new: true } // Return updated document
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project or task not found" });
+    }
+
+    res.status(200).json(updatedProject);
+  } catch (error) {
+    console.error("Error updating task status:", error);
+    res.status(500).json({ message: "Error updating task status", error });
+  }
+});
+

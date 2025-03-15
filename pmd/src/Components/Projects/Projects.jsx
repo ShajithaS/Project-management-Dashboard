@@ -138,7 +138,7 @@ const Projects = () => {
   
   // Add a new task to a project
 //changes
-  const addTask = (projectId) => {
+  /*const addTask = (projectId) => {
     if (!newTask.trim() || !assignedMember.trim()) return;
     setProjects(
       projects.map((p) =>
@@ -160,32 +160,113 @@ const Projects = () => {
     );
     setNewTask("");
     setAssignedMember("");
+  };*/
+  /*const addTask = async (projectId) => {
+    if (!newTask.trim() || !assignedMember.trim()) return;
+    try {
+      const response = await axios.post(`/projects/${projectId}/tasks`, {
+        title: newTask,
+        assignedTo: assignedMember,
+        status: "Pending",
+      });
+      setProjects(projects.map((p) => (p._id === projectId ? response.data : p)));
+      setNewTask("");
+      setAssignedMember("");
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
+  };*/
+  const addTask = async (projectId) => {
+  if (!newTask.trim() || !assignedMember.trim()) return;
+
+  const newTaskData = {
+    id: Date.now(),
+    title: newTask,
+    status: "Pending",
+    assignedTo: assignedMember,
   };
 
-  // Update task status
-  const updateTaskStatus = (projectId, taskId, newStatus) => {
+  setProjects(
+    projects.map((p) =>
+      p._id === projectId
+        ? { ...p, tasks: [...p.tasks, newTaskData] }
+        : p
+    )
+  );
+
+  try {
+    const response = await axios.put(`http://localhost:3001/project/${projectId}/tasks`, {
+      title: newTask,
+      assignedTo: assignedMember,
+      status: "Pending",
+    });
+
+    setProjects(projects.map((p) => (p._id === projectId ? response.data.updatedProject : p)));
+  } catch (error) {
+    console.error("Error adding task:", error);
+
     setProjects(
       projects.map((p) =>
-        p.id === projectId
+        p._id === projectId
+          ? { ...p, tasks: p.tasks.filter((task) => task.id !== newTaskData.id) }
+          : p
+      )
+    );
+  }
+
+  setNewTask("");
+  setAssignedMember("");
+};
+
+
+  // Update task status
+  /*const updateTaskStatus = (projectId, taskId, newStatus) => {
+    console.log(projectId);
+    console.log(taskId);
+    setProjects(
+      
+      projects.map((p) =>
+        p._id === projectId
           ? {
               ...p,
               tasks: p.tasks.map((task) =>
-                task.id === taskId ? { ...task, status: newStatus } : task
+                task._id === taskId ? { ...task, status: newStatus } : task
               ),
             }
           : p
       )
     );
-  };
+  };*/
+  const updateTaskStatus = async (projectId, taskId, newStatus) => {
+  try {
+    const response = await axios.put(`http://localhost:3001/project/${projectId}/task/${taskId}`, {
+      status: newStatus,
+    });
+
+    setProjects(projects.map((project) =>
+      project._id === projectId
+        ? {
+            ...project,
+            tasks: project.tasks.map((task) =>
+              task._id === taskId ? { ...task, status: newStatus } : task
+            ),
+          }
+        : project
+    ));
+  } catch (error) {
+    console.error("Error updating task status:", error);
+  }
+};
+
 
   // Delete a task
   const deleteTask = async (projectId, taskId) => {
     setProjects(
       projects.map((p) =>
-        p.id === projectId
+        p._id === projectId
           ? {
               ...p,
-              tasks: p.tasks.filter((task) => task.id !== taskId),
+              tasks: p.tasks.filter((task) => task._id !== taskId),
             }
           : p
       )
@@ -557,8 +638,8 @@ const Projects = () => {
                           value={task.status}
                           onChange={(e) =>
                             updateTaskStatus(
-                              project.id,
-                              task.id,
+                              project._id,
+                              task._id,
                               e.target.value
                             )
                           }
@@ -569,7 +650,7 @@ const Projects = () => {
                         </select>
                         <button
                           className="delete-btn"
-                          onClick={() => deleteTask(project.id, task.id)}
+                          onClick={() => deleteTask(project._id, task._id)}
                         >
                           🗑
                         </button>
