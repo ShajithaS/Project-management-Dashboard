@@ -4,7 +4,7 @@ import { useState } from 'react';
 import './Signup.css'
 import axios from "axios"
 const Signup = () => {
-    const navigate=useNavigate()
+  const navigate=useNavigate()
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const Signup = () => {
       lastname: lastname,
       email: email,
       phoneNumber: phoneNumber,
-      password: password
+      password: password,
     });
     const message=req.data.message;
     const isSignup=req.data.isSignup;
@@ -79,5 +79,4 @@ const Signup = () => {
     </div>
   )
 }
-
 export default Signup

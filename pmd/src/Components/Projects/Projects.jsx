@@ -16,72 +16,7 @@ import {
 import Navbar from "../Navbar/Navbar";
 
 const Projects = () => {
-  const [projects, setProjects] = useState([
-    /*{
-    id: 1,
-    title: "Healthcare App",
-    description:
-      "A mobile app for booking doctor appointments and managing health records.",
-    status: "Completed",
-    deadline: "2025-02-20",
-    tasks: [
-      { id: 401, title: "Build Mobile UI", status: "Completed", assignedTo: "Mia" },
-      { id: 402, title: "Setup Firebase Backend", status: "Completed", assignedTo: "Liam" },
-      { id: 403, title: "Deploy on App Store", status: "Completed", assignedTo: "Noah" },
-    ],
-  },
-    {
-      id: 2,
-      title: "Project Management Dashboard",
-      description:
-        "A MERN stack application to manage projects, tasks, and teams.",
-      status: "In Progress",
-      deadline: "2025-03-02",
-      tasks: [
-        {
-          id: 101,
-          title: "Setup Database",
-          status: "Completed",
-          assignedTo: "John",
-        },
-        {
-          id: 102,
-          title: "Build UI Components",
-          status: "In Progress",
-          assignedTo: "Ben",
-        },
-        {
-          id: 103,
-          title: "Integrate Backend",
-          status: "Pending",
-          assignedTo: "Lia",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Dyslexia Assist App",
-      description:
-        "An AI-powered application to assist dyslexic users with reading.",
-      status: "Pending",
-      deadline: "2025-04-01",
-      tasks: [
-        {
-          id: 201,
-          title: "Collect Dataset",
-          status: "Pending",
-          assignedTo: "Amanda",
-        },
-        {
-          id: 202,
-          title: "Train Model",
-          status: "Pending",
-          assignedTo: "Claura",
-        },
-      ],
-    },*/
-  ]);
-
+  const [projects, setProjects] = useState([]);
   const [editingProject, setEditingProject] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectData, setProjectData] = useState({
@@ -96,18 +31,7 @@ const Projects = () => {
     status: "Pending",
     deadline: "",
   });
-  // Delete Project
-  const deleteProject = async (projectId) => {
-    if (!window.confirm("Are you sure you want to delete this project?")) return;
-    try {
-      await axios.delete(`http://localhost:3001/project/${projectId}`);
-      setProjects(projects.filter((p) => p._id !== projectId));
-      alert("Project deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting project:", error);
-      alert("Failed to delete the project.");
-    }
-  };
+  
   // Toggle project details view
   const toggleProjectDetails = (projectId) => {
     setSelectedProject(selectedProject === projectId ? null : projectId);
@@ -130,16 +54,6 @@ const Projects = () => {
   };
 
   // Update project details
-  //changes
-  /*const updateProject = (e) => {
-    e.preventDefault();
-    setProjects(
-      projects.map((p) =>
-        p.id === editingProject ? { ...p, ...projectData } : p
-      )
-    );
-    setEditingProject(null);
-  };*/
   const updateProject = async (e) => {
     e.preventDefault();
     try {
@@ -151,51 +65,80 @@ const Projects = () => {
       console.error("Error updating project:", error);
     }
   };
+  const handleNewProjectChange = (e) => {
+    setNewProject({ ...newProject, [e.target.name]: e.target.value });
+  };
+  //changes
+  const addNewProject = async (e) => {
+    e.preventDefault();
+    if (!newProject.title.trim() || !newProject.description.trim()) return;
+    const newProjectData = {
+    id: Date.now(),
+    ...newProject,
+    tasks: []
+  };
 
+  setProjects([...projects, newProjectData]);
+
+  // Save to database
+  await handleSave(newProjectData);
+
+  // Reset form
+  setNewProject({
+    title: "",
+    description: "",
+    status: "Pending",
+    deadline: "",
+  });
+  };
+
+  const handleSave = async(project) => {
+    const req=await axios.post("http://localhost:3001/project",project);
+    const message=req.data.message;
+    const isSave=req.data.isSave;
+    if(isSave){
+        alert(message)
+    }
+    else{
+        alert(message)
+    }
+  };
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/projects");
+        const projectsWithId = response.data.map((project) => ({
+        ...project,
+        id: project._id, // Use MongoDB _id as the ID
+      }));
+
+      setProjects(projectsWithId);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Delete Project
+  const deleteProject = async (projectId) => {
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
+    try {
+      await axios.delete(`http://localhost:3001/project/${projectId}`);
+      setProjects(projects.filter((p) => p._id !== projectId));
+      alert("Project deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      alert("Failed to delete the project.");
+    }
+  };
 
   const [newTask, setNewTask] = useState("");
   const [assignedMember, setAssignedMember] = useState("");
   
   // Add a new task to a project
-//changes
-  /*const addTask = (projectId) => {
-    if (!newTask.trim() || !assignedMember.trim()) return;
-    setProjects(
-      projects.map((p) =>
-        p.id === projectId
-          ? {
-              ...p,
-              tasks: [
-                ...p.tasks,
-                {
-                  id: Date.now(),
-                  title: newTask,
-                  status: "Pending",
-                  assignedTo: assignedMember,
-                },
-              ],
-            }
-          : p
-      )
-    );
-    setNewTask("");
-    setAssignedMember("");
-  };*/
-  /*const addTask = async (projectId) => {
-    if (!newTask.trim() || !assignedMember.trim()) return;
-    try {
-      const response = await axios.post(`/projects/${projectId}/tasks`, {
-        title: newTask,
-        assignedTo: assignedMember,
-        status: "Pending",
-      });
-      setProjects(projects.map((p) => (p._id === projectId ? response.data : p)));
-      setNewTask("");
-      setAssignedMember("");
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
-  };*/
+
   const addTask = async (projectId) => {
   if (!newTask.trim() || !assignedMember.trim()) return;
 
@@ -240,23 +183,7 @@ const Projects = () => {
 
 
   // Update task status
-  /*const updateTaskStatus = (projectId, taskId, newStatus) => {
-    console.log(projectId);
-    console.log(taskId);
-    setProjects(
-      
-      projects.map((p) =>
-        p._id === projectId
-          ? {
-              ...p,
-              tasks: p.tasks.map((task) =>
-                task._id === taskId ? { ...task, status: newStatus } : task
-              ),
-            }
-          : p
-      )
-    );
-  };*/
+
   const updateTaskStatus = async (projectId, taskId, newStatus) => {
   try {
     const response = await axios.put(`http://localhost:3001/project/${projectId}/task/${taskId}`, {
@@ -280,18 +207,7 @@ const Projects = () => {
 
 
   // Delete a task
- /* const deleteTask = async (projectId, taskId) => {
-    setProjects(
-      projects.map((p) =>
-        p._id === projectId
-          ? {
-              ...p,
-              tasks: p.tasks.filter((task) => task._id !== taskId),
-            }
-          : p
-      )
-    );
-  };*/
+
   const deleteTask = async (projectId, taskId) => {
     console.log("Project ID:", projectId);
     console.log("Task ID:", taskId);
@@ -317,43 +233,8 @@ const Projects = () => {
         return "";
     }
   };
-  const handleNewProjectChange = (e) => {
-    setNewProject({ ...newProject, [e.target.name]: e.target.value });
-  };
-  //changes
-  const addNewProject = async (e) => {
-    e.preventDefault();
-    if (!newProject.title.trim() || !newProject.description.trim()) return;
-    const newProjectData = {
-    id: Date.now(),
-    ...newProject,
-    tasks: []
-  };
-
-  setProjects([...projects, newProjectData]);
-
-  // Save to database
-  await handleSave(newProjectData);
-
-  // Reset form
-  setNewProject({
-    title: "",
-    description: "",
-    status: "Pending",
-    deadline: "",
-  });
-  };
-  /*const addNewProject = (e) => {
-     e.preventDefault();
-     if (!newProject.title.trim() || !newProject.description.trim()) return;
-     setProjects([...projects, { id: Date.now(), ...newProject, tasks: [] }]);
-     setNewProject({
-       title: "",
-       description: "",
-       status: "Pending",
-       deadline: "",
-     });
-   };*/
+  
+  
   const totalCompleted = projects.filter(
     (p) => p.status === "Completed"
   ).length;
@@ -361,30 +242,24 @@ const Projects = () => {
     (p) => p.status === "In Progress"
   ).length;
   const totalPending = projects.filter((p) => p.status === "Pending").length;
-  const today = new Date();
+  
   //Task completion percentage
   const getTaskCompletion = (tasks) => {
     if (tasks.length === 0) return 0; // If no tasks, completion is 0%
     const completedTasks = tasks.filter(
       (task) => task.status === "Completed"
     ).length;
-    return Math.round((completedTasks / tasks.length) * 100); // Calculate percentage
+    return Math.round((completedTasks / tasks.length) * 100); 
   };
 
   // Check upcoming deadlines (projects due within the next 7 days)
+  const today = new Date();
   const upcomingDeadlines = projects.filter((p) => {
     const deadlineDate = new Date(p.deadline);
     const timeDiff = deadlineDate - today;
     const daysRemaining = timeDiff / (1000 * 60 * 60 * 24); // Convert milliseconds to days
     return daysRemaining > 0 && daysRemaining <= 7;
   }).length;
-
-  //barchart for project status
-  const projectStatusData = [
-    { name: "Completed", count: totalCompleted },
-    { name: "In Progress", count: totalInProgress },
-    { name: "Pending", count: totalPending },
-  ];
 
   //to search project
   const [searchQuery, setSearchQuery] = useState("");
@@ -400,6 +275,13 @@ const Projects = () => {
     ));
   }
 
+  //barchart for project status
+  const projectStatusData = [
+    { name: "Completed", count: totalCompleted },
+    { name: "In Progress", count: totalInProgress },
+    { name: "Pending", count: totalPending },
+  ];
+
   //piechart for total vs completed
   const totalProjects = projects.length;
   const completedProjects = projects.filter(
@@ -412,39 +294,8 @@ const Projects = () => {
   ];
 
   // Colors for Pie Chart
-  const COLORS = ["#28a745", "#dc3545"];
+  const COLORS = ["limegreen", "red"];
 
-  
-  const handleSave = async(project) => {
-    const req=await axios.post("http://localhost:3001/project",project);
-    const message=req.data.message;
-    const isSave=req.data.isSave;
-    if(isSave){
-        alert(message)
-    }
-    else{
-        alert(message)
-    }
-  };
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/projects");
-        const projectsWithId = response.data.map((project) => ({
-        ...project,
-        id: project._id, // Use MongoDB _id as the ID
-      }));
-
-      setProjects(projectsWithId);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-  
-  
   return (
     <div className="projects-container">
       <Navbar />
@@ -470,7 +321,7 @@ const Projects = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="count" fill="#007bff" />
+              <Bar dataKey="count" fill="blue" />
             </BarChart>
           </div>
           <PieChart width={300} height={300}>
@@ -654,7 +505,8 @@ const Projects = () => {
                       <div>
                         <h4>Delete</h4>
                       </div>
-                    </div>
+                    </div> 
+                    {/*task*/}
                     {project.tasks.map((task) => (
                       <div key={task.id} className="task-item">
                         <p
