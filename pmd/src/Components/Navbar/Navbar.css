@@ -16,7 +16,7 @@
 .logo {
     font-size: 24px;
     font-weight: bold;
-    background:#007bff;
+    background:black;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -43,7 +43,7 @@
 }
 
 .nav-links a:hover {
-    background:#007bff;
+    background:black;
     border-radius: 5px;
 }
 .ul{
