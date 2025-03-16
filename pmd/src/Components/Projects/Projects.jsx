@@ -357,15 +357,6 @@ const Projects = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
         />
-        <ul>
-          <li>
-            ✅ Click on a Project Title to toggle the details of that project.
-          </li>
-          <li>✅ Show Task Information under the selected project.</li>
-          <li>✅ Add task, delete task, assign members and change the status of task</li>
-          <li>✅ Colour of task changes according to status of task</li>
-          <li>✅ Include Progress Percentage for task completion.</li>
-        </ul>
         <div className="projects-grid">
           <div className="add-project-section">
             <h3>Add New Project</h3>
