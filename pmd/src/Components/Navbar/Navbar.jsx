@@ -17,7 +17,7 @@ const Navbar = () => {
       <ul className="nav-links">
         <li><AnchorLink offset={100} href='#dash'>Dashboard</AnchorLink></li>
         <li><AnchorLink  offset={100} href='#myprojects'>Projects</AnchorLink></li>
-        <li><Link to="/profile">Profile</Link></li>
+        {/*<li><Link to="/profile">Profile</Link></li>*/}
       </ul>
       <button className="logout-btn" onClick={handleLogout}>Logout</button>
     </nav>

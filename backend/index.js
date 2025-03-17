@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const port = 3001;
+const dotenv = require("dotenv");
+dotenv.config();
 const mdb = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
@@ -18,7 +20,7 @@ app.listen(port, () => {
 });
 
 mdb
-  .connect("mongodb+srv://sjit:sjit@signup.bgwqz.mongodb.net/")
+  .connect(process.env.MONGODB_URL)
   .then(() => {
     console.log("MDB connection Successful");
   })
